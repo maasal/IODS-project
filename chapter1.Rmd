@@ -1,4 +1,27 @@
-
+---
+title: "Week one assignment"
+author: "Mikko Salonen"
+output: html_document
+---
 # About the project
 
 *Write a short description about the course and add a link to your github repository here. This is an R markdown (.Rmd) file so you can use R markdown syntax. See the 'Useful links' page in the mooc area (chapter 1) for instructions.*
+
+### Description of the course
+In this course I will learn about:
+
+  * R
+  * R Markdown
+  * git
+  * Data analysis
+  
+
+### My github repository
+<https://github.com/maasal/IODS-project>
+
+#### Useful links
+[R Markdown cheatsheet](https://www.rstudio.com/wp-content/uploads/2015/02/rmarkdown-cheatsheet.pdf)
+
+[dplyr cheatsheet](https://www.rstudio.com/wp-content/uploads/2015/02/data-wrangling-cheatsheet.pdf)
+
+[ggplot2 cheatsheet](https://www.rstudio.com/wp-content/uploads/2015/03/ggplot2-cheatsheet.pdf)
