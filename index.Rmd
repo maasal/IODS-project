@@ -1,8 +1,9 @@
 ---
 title: "IODS course project"
+author: "Mikko Salonen"
 output:
   html_document:
-    theme: cosmo
+    theme: flatly
     toc: true
     toc_depth: 2
     fig_caption: true

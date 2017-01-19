@@ -1,0 +1,18 @@
+---
+title: "README"
+author: "Mikko Salonen"
+date: "19 January 2017"
+output: html_document
+---
+
+### Description of the course
+In this course I will learn about:
+
+  * R
+  * R Markdown
+  * git
+  * Data analysis
+  
+
+### My github repository --- course diary
+<https://github.com/maasal/IODS-project>
