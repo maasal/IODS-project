@@ -1,6 +1,11 @@
-# Analysis of a survey data --- performance in a statistical course
+# Chapter 2: Analysis of a survey data --- test performance in a statistics course based on student variables
+<!-- *Describe the work you have done this week and summarize your learning.* -->
 
-## Introduction to the data
+<!-- - Describe your work and results clearly.  -->
+<!-- - Assume the reader has an introductory course level understanding of writing and reading R code as well as statistical methods -->
+<!-- - Assume the reader has no previous knowledge of your data or the more advanced methods you are using   -->
+<!-- Read the data, explore structure and dimensions, describe data briefly -->
+### Introduction to the data
 Lets read the data from a local folder and see how many observations and variables we have to work with.
 ```{r echo=FALSE}
 learning2014 <- read.csv("data/learning2014.csv",row.names = "X")
@@ -10,7 +15,9 @@ summary(learning2014)
 ```
 We have 166 observations and 7 variables from a survey collected from a statistics course. There are two times more females in the data than males. The median age is 22. Attitude, deep, stra, surf are measured in Likert scale. Attitude is a combination of motivation to learn statistics and confidence in their mathematical skills. Deep is a combination of questions related to how people evaluate information and willingness to understand or apply it. Stra measures strategic behavior; how an individual works and plans. Surf on the other hand measures if people are not interested in their studies or concentrate on course requirements rather than on fully understanding the subject, that is, "surface learning" in other words. Points is the maximal overall points that the student got - or "performance". From the code-blocks above, one can see some vital information about the variables.
 
-##Graphical summarization
+
+<!-- show graphical overview of the data and show summaries of the variables in the data, describe and interpret, comment on the distributions of the variables and relationships between them -->
+### Graphical summarization
 Let's show a graphical overview of the data.
 
 ```{r echo=FALSE, cache=TRUE}
@@ -20,7 +27,7 @@ theme_set(theme_light(base_size=9))
 ggpairs(learning2014, mapping = aes(col = gender, alpha = 0.3), lower = list(combo = wrap("facethist", bins = 20)))
 ```
 
-The above graph summarizes all the relevant graphs of the variables distributions colored with based on gender. As one can see, men seem to have a better attitude, less inclined for surface learning and perform slightly better. On the other hand, most females describe themselves as deeper learners and have a display a higher degree of strategic learning patterns. Another noticiable thing is that men are on average older than their female counterparts. Reader should recognize the different correlations between the variables. Most notable is the high correlation between exam performance and attitude points and the negative correlation of points and surface learning.
+The above graph summarizes all the relevant graphs of the variables distributions colored based on gender. As one can see, men seem to have a better attitude, less inclined for surface learning and perform slightly better. On the other hand, most females describe themselves as deeper learners and display a higher degree of strategic learning patterns. Another noticiable thing is that men are on average older than their female counterparts. Reader should recognize the different correlations between the variables. Most notable is the high correlation between exam performance and attitude points and the negative correlation of points and surface learning.
 <!-- # ```{r echo=FALSE} 
 # library(ggplot2)
 # ggplot(learning2014,aes(age)) +
@@ -49,29 +56,56 @@ The above graph summarizes all the relevant graphs of the variables distribution
 #   
 # ```-->
 
-<!-- *Describe the work you have done this week and summarize your learning.* -->
-
-<!-- - Describe your work and results clearly.  -->
-<!-- - Assume the reader has an introductory course level understanding of writing and reading R code as well as statistical methods -->
-<!-- - Assume the reader has no previous knowledge of your data or the more advanced methods you are using   -->
-
-
-<!-- Read the data, explore structure and dimensions, describe data briefly -->
-
-<!-- show graphical overview of the data and show summaries of the variables in the data, describe and interpret, comment on the distributions of the variables and relationships between them -->
-```{r echo=FALSE}
-library(ggplot2)
-ggplot(learning2014, aes(attitude, points, col = gender)) + 
-  geom_point() + 
-  geom_smooth(method = "lm") +
-  ggtitle("Student's attitude versus exam points")
-
-  
-```
-
 
 <!-- choose three variables as explanatory variables and fit a regression model where exam points is the target variable, show a summary of the fitted model and comment and interpret the results, explain and interpret the statistical test relatod to the model parameters, take away statistically insignifficant variables and fit again -->
+### Fitting a regression
+In this section we try to find a suitable regression formula that summarizes the performance (points) of the students well. We start by trying out some models (commented out) and finally arrive to a model we believe is a good approximation on the variables that have a biggest effect on performance based on statistical signifficance of the variables used.
+
+```{r echo=TRUE}
+#model1 <- lm(points ~ deep + surf + gender, data = learning2014)
+#remove unsignifficant variables and try a different model
+
+#model2 <- lm(points ~ surf + age + stra, data = learning2014 )
+#remove unsignifficant variables and try a different model
+
+#model3 <- lm(points ~ surf + stra + attitude, data = learning2014 )
+#remove unsignifficant variables and try a different model
+
+#model4 <- lm(points ~ attitude + deep + gender, data = learning2014 )
+#remove unsignifficant variables and try a different model
+
+my_model <- lm(points ~ age + attitude + stra, data= learning2014)
+summary(my_model)  
+```
 
 <!-- using summary of your fitted model, explain the realtionship between the chosen explanatory variables and the target variable, interpret the model parameters,  explain and interpret the multiple R-squared of the model -->
 
+The iterated model is  
+
+> points ~ age + attitude + stra 
+
+### Interpretation of the linear regression model
+
+We can interpret our model as follows: if we have one point higher attitude (Likert scale), our test scores are on average three and a half points higher with a standard error of roughly 0.56. Age and strategic behaviour are statistically signifficant at p-value 10%, thus we exclude their interpretations since it might be just chance these variables have an effect on test scores which differs from zero. The adjusted R-squared, or the goodness-of-fit, is 0.2037 and the F-statistic is statistically signifficant. This means that the fit is good and it has statistical signifficance in explaining the test score performance. Note that the normal R-squared increases as one adds variables to the model, the adjusted one does not.
+
 <!-- produce following diagnostic plots: residual vs. fitted values, normal qq-plot and residual vs. leverage. Explain the assumptions of the model and interpret the validity of those assumptions based on the diagnostic plots -->
+
+```{r echo=FALSE}
+library(ggplot2)
+par(mfrow = c(2,2))
+plot(my_model, which(c(T,T,F,F,T,F)))
+
+
+plot(density(my_model$residuals), main="Distibution of residuals")
+
+```
+
+In the plot with fitted values and residuals it is fairly clear that there is no apparent pattern between the two. This suggests that the size of the errors do not depend greatly on the explanatory variables used. We can see from the Q-Q plot that there is a reasonable fit on the line, meaning that the residuals are roughly normally distributed. This is demonstrated on the fourth plot where one can see the distribution of the residuals. On the leverage plot one can see that there are couple of observations which are quite different meaning that these observations might have a big impact on the results, though the numbers are small and we can still be confident in our model.
+
+We can be fairly confident in our model that attitude has the biggest effect on exam performance. Multiple diagnostics of this model confirmed that there are no apparent reason to doubt that the residuals are correlated with the explanatory variables, the residuals are not normally distributed, or our results are based on very high impacting or leveraging outliers.
+
+
+
+
+
+
