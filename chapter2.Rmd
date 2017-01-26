@@ -16,7 +16,8 @@ Let's show a graphical overview of the data.
 ```{r echo=FALSE, cache=TRUE}
 library(ggplot2)
 library(GGally)
-ggpairs(learning2014, mapping = aes(col = gender, alpha = 0.3), lower = list(combo = wrap("facethist", bins = 20)))
+ggpairs(learning2014, mapping = aes(col = gender, alpha = 0.3), lower = list(combo = wrap("facethist", bins = 20))) +
+  theme_light(base_size= 7)
 ```
 
 The above graph summarizes all the relevant graphs of the variables distributions colored with based on gender. As one can see, men seem to have a better attitude, less inclined for surface learning and perform slightly better. On the other hand, most females describe themselves as deeper learners and have a display a higher degree of strategic learning patterns. Another noticiable thing is that men are on average older than their female counterparts. Reader should recognize the different correlations between the variables. Most notable is the high correlation between exam performance and attitude points and the negative correlation of points and surface learning.
