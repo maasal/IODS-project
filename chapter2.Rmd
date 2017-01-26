@@ -7,7 +7,7 @@
 <!-- Read the data, explore structure and dimensions, describe data briefly -->
 ### Introduction to the data
 Lets read the data from a local folder and see how many observations and variables we have to work with.
-```{r echo=FALSE}
+```{r}
 learning2014 <- read.csv("data/learning2014.csv",row.names = "X")
 dim(learning2014)
 str(learning2014)
@@ -20,7 +20,7 @@ We have 166 observations and 7 variables from a survey collected from a statisti
 ### Graphical summarization
 Let's show a graphical overview of the data.
 
-```{r echo=FALSE, cache=TRUE}
+```{r cache=TRUE}
 library(ggplot2)
 library(GGally)
 theme_set(theme_light(base_size=9))
@@ -90,7 +90,7 @@ We can interpret our model as follows: if we have one point higher attitude (Lik
 
 <!-- produce following diagnostic plots: residual vs. fitted values, normal qq-plot and residual vs. leverage. Explain the assumptions of the model and interpret the validity of those assumptions based on the diagnostic plots -->
 
-```{r echo=FALSE}
+```{r}
 library(ggplot2)
 par(mfrow = c(2,2))
 plot(my_model, which(c(T,T,F,F,T,F)))
