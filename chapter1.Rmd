@@ -14,6 +14,9 @@ In this course I will learn about:
 ### My github repository
 <https://github.com/maasal/IODS-project>
 
+### My course diary
+<https://maasal.github.io/IODS-project/>
+
 #### Useful links
 [R Markdown cheatsheet](https://www.rstudio.com/wp-content/uploads/2015/02/rmarkdown-cheatsheet.pdf)
 

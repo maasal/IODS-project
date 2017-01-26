@@ -13,7 +13,9 @@ In this course I will learn about:
   * Data analysis
   
 
-### My github repository --- course diary
+### My github repository and course diary
 Check out this link for a frequently updated course diary
 
 <https://github.com/maasal/IODS-project>
+
+<https://maasal.github.io/IODS-project/>
