@@ -1,11 +1,7 @@
 ---
 title: "README"
 author: "Mikko Salonen"
-date: "19 January 2017"
-output: 
-  html_document:  
-    toc: true
-    theme: flatly
+output: "html_document"
 ---
 
 ### Description of the course
@@ -18,4 +14,6 @@ In this course I will learn about:
   
 
 ### My github repository --- course diary
+Check out this link for a frequently updated course diary
+
 <https://github.com/maasal/IODS-project>

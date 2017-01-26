@@ -1,10 +1,6 @@
----
-title: "Week one assignment"
-author: "Mikko Salonen"
-output: html_document
----
+
 # About the project
-This is the start of my course diary. Updates coming soon.
+This is the start of my course diary (check the link). Updates coming soon.
 
 ### Description of the course
 In this course I will learn about:
