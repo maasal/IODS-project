@@ -1,7 +1,76 @@
-# Insert chapter 2 title here
+# Analysis of a survey data --- performance in a statistical course
 
-*Describe the work you have done this week and summarize your learning.*
+## Introduction to the data
+Lets read the data from a local folder and see how many observations and variables we have to work with.
+```{r echo=FALSE}
+learning2014 <- read.csv("data/learning2014.csv",row.names = "X")
+dim(learning2014)
+str(learning2014)
+summary(learning2014)
+```
+We have 166 observations and 7 variables from a survey collected from a statistics course. There are two times more females in the data than males. The median age is 22. Attitude, deep, stra, surf are measured in Likert scale. Attitude is a combination of motivation to learn statistics and confidence in their mathematical skills. Deep is a combination of questions related to how people evaluate information and willingness to understand or apply it. Stra measures strategic behavior; how an individual works and plans. Surf on the other hand measures if people are not interested in their studies or concentrate on course requirements rather than on fully understanding the subject, that is, "surface learning" in other words. Points is the maximal overall points that the student got - or "performance". From the code-blocks above, one can see some vital information about the variables.
 
-- Describe your work and results clearly. 
-- Assume the reader has an introductory course level understanding of writing and reading R code as well as statistical methods
-- Assume the reader has no previous knowledge of your data or the more advanced methods you are using  
+##Graphical summarization
+Let's show a graphical overview of the data.
+
+```{r echo=FALSE, cache=TRUE}
+library(ggplot2)
+library(GGally)
+ggpairs(learning2014, mapping = aes(col = gender, alpha = 0.3), lower = list(combo = wrap("facethist", bins = 20)))
+```
+
+The above graph summarizes all the relevant graphs of the variables distributions colored with based on gender. As one can see, men seem to have a better attitude, less inclined for surface learning and perform slightly better. On the other hand, most females describe themselves as deeper learners and have a display a higher degree of strategic learning patterns. Another noticiable thing is that men are on average older than their female counterparts. Reader should recognize the different correlations between the variables. Most notable is the high correlation between exam performance and attitude points and the negative correlation of points and surface learning.
+<!-- # ```{r echo=FALSE} 
+# library(ggplot2)
+# ggplot(learning2014,aes(age)) +
+#   geom_histogram(aes(fill=gender)) + 
+#   ggtitle("Histogram of age")
+# ggplot(learning2014,aes(gender,attitude)) +
+#   geom_boxplot(aes(fill=gender)) + 
+#   geom_jitter(width = 0.1) +
+#   ggtitle("Attitude - boxplot for two genders") 
+# ggplot(learning2014,aes(gender,deep)) +
+#   geom_boxplot(aes(fill=gender)) + 
+#   geom_jitter(width = 0.1) +
+#   ggtitle("Deep - boxplot for two genders") 
+# ggplot(learning2014,aes(gender,stra)) +
+#   geom_boxplot(aes(fill=gender)) + 
+#   geom_jitter(width = 0.1) +
+#   ggtitle("Stra - boxplot for two genders") 
+# ggplot(learning2014,aes(gender,surf)) +
+#   geom_boxplot(aes(fill=gender)) + 
+#   geom_jitter(width = 0.1) +
+#   ggtitle("Surf - boxplot for two genders") 
+# ggplot(learning2014,aes(gender,points)) +
+#   geom_boxplot(aes(fill=gender)) +
+#   geom_jitter(width = 0.1) +
+#   ggtitle("Points - boxplot for two genders") 
+#   
+# ```-->
+
+<!-- *Describe the work you have done this week and summarize your learning.* -->
+
+<!-- - Describe your work and results clearly.  -->
+<!-- - Assume the reader has an introductory course level understanding of writing and reading R code as well as statistical methods -->
+<!-- - Assume the reader has no previous knowledge of your data or the more advanced methods you are using   -->
+
+
+<!-- Read the data, explore structure and dimensions, describe data briefly -->
+
+<!-- show graphical overview of the data and show summaries of the variables in the data, describe and interpret, comment on the distributions of the variables and relationships between them -->
+```{r echo=FALSE}
+library(ggplot2)
+ggplot(learning2014, aes(attitude, points, col = gender)) + 
+  geom_point() + 
+  geom_smooth(method = "lm") +
+  ggtitle("Student's attitude versus exam points")
+
+  
+```
+
+
+<!-- choose three variables as explanatory variables and fit a regression model where exam points is the target variable, show a summary of the fitted model and comment and interpret the results, explain and interpret the statistical test relatod to the model parameters, take away statistically insignifficant variables and fit again -->
+
+<!-- using summary of your fitted model, explain the realtionship between the chosen explanatory variables and the target variable, interpret the model parameters,  explain and interpret the multiple R-squared of the model -->
+
+<!-- produce following diagnostic plots: residual vs. fitted values, normal qq-plot and residual vs. leverage. Explain the assumptions of the model and interpret the validity of those assumptions based on the diagnostic plots -->
