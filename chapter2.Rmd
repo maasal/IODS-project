@@ -20,7 +20,7 @@ We have 166 observations and 7 variables from a survey collected from a statisti
 ### Graphical summarization
 Let's show a graphical overview of the data.
 
-```{r cache=TRUE}
+```{r}
 library(ggplot2)
 library(GGally)
 theme_set(theme_light(base_size=9))
@@ -62,16 +62,20 @@ The above graph summarizes all the relevant graphs of the variables distribution
 In this section we try to find a suitable regression formula that summarizes the performance (points) of the students well. We start by trying out some models (commented out) and finally arrive to a model we believe is a good approximation on the variables that have a biggest effect on performance based on statistical signifficance of the variables used.
 
 ```{r echo=TRUE}
-#model1 <- lm(points ~ deep + surf + gender, data = learning2014)
+model1 <- lm(points ~ deep + surf + gender, data = learning2014)
+summary(model1)
 #remove unsignifficant variables and try a different model
 
-#model2 <- lm(points ~ surf + age + stra, data = learning2014 )
+model2 <- lm(points ~ surf + age + stra, data = learning2014 )
+summary(model2)
 #remove unsignifficant variables and try a different model
 
-#model3 <- lm(points ~ surf + stra + attitude, data = learning2014 )
+model3 <- lm(points ~ surf + stra + attitude, data = learning2014 )
+summary(model3)
 #remove unsignifficant variables and try a different model
 
-#model4 <- lm(points ~ attitude + deep + gender, data = learning2014 )
+model4 <- lm(points ~ attitude + deep + gender, data = learning2014 )
+summary(model4)
 #remove unsignifficant variables and try a different model
 
 my_model <- lm(points ~ age + attitude + stra, data= learning2014)
