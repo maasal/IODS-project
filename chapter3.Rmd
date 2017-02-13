@@ -11,7 +11,6 @@ output: html_document
 Let's first read the data from a local folder and print out the column names. This file has data on student alcohol consumption, descriptive variables, and most importantly number of absences and final grade (G3 - from 0 to 20). We will analyse the relatinship between alcohol consumption (binary variable high_use) to other variables (G3 test grade, mothers education, gender, and absences). Hypothesis: i) from previous studies the mothers educational background usually has had a good explanatory strength in the performance/behavior of their children. Furthermore, ii) males tend to drink more, iii) and absences captures the "dropout" behavior in the data. iv) Low test performance likely affects (and other way as well) tendency to drink because students are, in lack of other words, demoralized or simply sad. v) Freetime and goout measure the reported 'boredom' or neglect of coursework as well as amount of socializing of the students.
 
 ```{r setup, include=FALSE}
-setwd("~/Documents/IODS/git/IODS-project/")
 alc <- read.csv("data/alc.csv",row.names = "X")
 #also available from http://s3.amazonaws.com/assets.datacamp.com/production/course_2218/datasets/alc.txt 
 

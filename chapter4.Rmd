@@ -1,0 +1,120 @@
+---
+title: 'Chapter 4: clustering'
+author: "Mikko Salonen"
+date: "February 13, 2017"
+output: html_document
+---
+# Chapter 4: Clustering
+
+### Preliminaries
+
+Here we study the Boston data-set. There's 504 observations and 14 variables. Basic information about the variables: crim is the per capita crime rate by town, dis is the weighted mean of distances to five Boston employment centres, ptratio is the pupil-teacher ratio by town, medv is the median value of owner-occupied homes per 1000 dollars. As we can see from the summary, crime is highly skewed with outliers. However, the ptratio and medv are distributed 'fairly' evenly.
+
+```{r}
+library(MASS)
+library(dplyr)
+library(tidyr)
+library(ggplot2)
+library(corrplot)
+data("Boston")
+dim(Boston)
+str(Boston)
+glimpse(Boston)
+summary(Boston)
+pairs(Boston)
+
+plot(density(Boston$crim))
+plot(density(Boston$ptratio))
+plot(density(Boston$medv))
+```
+
+
+### Correlations, factoring, and dividing the data to test and training sets
+
+```{r}
+
+#calculate the correlations and plot them
+cor_matrix <- cor(Boston)
+cor_matrix %>% round(digits=2) %>% corrplot.mixed(tl.cex = 0.7,number.cex=0.7,order="hclust",addrect=2)
+```
+
+From the correlation pairs plot we can see the relevant correlations between the variables. As one could expect industrial areas are related to nitrogen oxides concentration and negatively correlated with residential areas and employment centers. Crime is correlated among others with radial highways and industrial areas.
+
+Next we standardize the data sets. The distributions are easier to see with standardized variables. Let's divide the crime variable to a factor of size four: "low" to "high". We divide the data to trainingsets and testsets with a share of 80%.
+
+```{r}
+boston_scaled <- scale(Boston)
+summary(boston_scaled) 
+
+boston_scaled <- as.data.frame(boston_scaled)
+scaled_crim <- boston_scaled$crim
+summary(scaled_crim)
+
+bins <- quantile(scaled_crim)
+bins
+
+crime <- cut(scaled_crim, breaks= bins, include.lowest = TRUE, labels = c("low", "med_low", "med_high", "high"))
+crime
+
+boston_scaled <- dplyr::select(boston_scaled, -crim)
+boston_scaled <- data.frame(boston_scaled, crime)
+
+n <- nrow(boston_scaled)
+n
+
+index <- sample(n, size = n * 0.8)
+index
+
+trainingset <- boston_scaled[index,]
+testset <- boston_scaled[-index,]
+
+correct_classes <- testset$crime
+testset <- dplyr::select(testset, -crime)
+
+```
+
+
+### The Linear Discriminant Analysis
+
+Next we fit a lda model. We try to expain crime rate with other variables in the data.
+ First level LDA does a good job on dividing the data. There are two main 'groups' high crime areas are vastly different from the rest groups. We can see that high crime is closely related to being close to radial highways (variable rad). This seems to be the dividing factor. From the testset and prediction table we can see that prediction of high crime is accurate but there is some dispersion in the med_high to low crime predictions. Our model seems to work quite adequately.
+```{r}
+lda.fit <- lda(crime ~ ., data = trainingset)
+lda.fit
+
+lda.arrows <- function(x, myscale = 1, arrow_heads = 0.1, color = "red", tex = 0.75, choices = c(1,2)){
+  heads <- coef(x)
+  arrows(x0 = 0, y0 = 0, 
+         x1 = myscale * heads[,choices[1]], 
+         y1 = myscale * heads[,choices[2]], col=color, length = arrow_heads)
+  text(myscale * heads[,choices], labels = row.names(heads), 
+       cex = tex, col=color, pos=3)
+}
+
+classes <- as.numeric(trainingset$crime)
+
+plot(lda.fit, dimen =2, col = classes, pch = classes)
+lda.arrows(lda.fit, myscale = 1)
+
+lda.pred <- predict(lda.fit, newdata = testset)
+
+table(correct = correct_classes, predicted = lda.pred$class)
+```
+
+# K-means clustering
+
+Next we calculate the distance matrix to cluster the Boston data. As can be seen from pairs plot and ggpairs (this one is a bit messy), three centers seems to work quite well on the data. 
+
+```{r}
+library(MASS)
+data('Boston')
+dist_euclidian <- dist(Boston)
+summary(dist_euclidian)
+km <- kmeans(dist_euclidian, centers=3)
+pairs(Boston, col = c(km$cluster,alpha=0.2),pch=km$cluster)
+library(GGally)
+data.frame(km$cluster)[,1]
+Boston2 <- mutate(Boston, cluster = as.factor(data.frame(km$cluster)[,1]))
+ggpairs(Boston2, mapping = aes(col = cluster, alpha = 0.3), lower = list(combo = wrap("facethist", bins = 20)), title ="K-means (3) colored plots")
+```
+
