@@ -101,7 +101,7 @@ lda.pred <- predict(lda.fit, newdata = testset)
 table(correct = correct_classes, predicted = lda.pred$class)
 ```
 
-# K-means clustering
+### K-means clustering
 
 Next we calculate the distance matrix to cluster the Boston data. As can be seen from pairs plot and ggpairs (this one is a bit messy), three centers seems to work quite well on the data. 
 
