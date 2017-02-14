@@ -25,3 +25,9 @@ str(gender)
 human <- inner_join(human,gender,by= "Country")
 dim(human)
 str(human)
+
+write.csv(x = human,file = "human.csv")
+rm(gender,gii,human,humandev,hd)
+
+test_data <- read.csv(file = "human.csv",row.names = "X")
+summary(test_data)
