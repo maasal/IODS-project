@@ -103,18 +103,25 @@ table(correct = correct_classes, predicted = lda.pred$class)
 
 ### K-means clustering
 
-Next we calculate the distance matrix to cluster the Boston data. As can be seen from pairs plot and ggpairs (this one is a bit messy), three centers seems to work quite well on the data. 
+Next we calculate the distance matrix to cluster the Boston data. As can be seen from pairs plot and ggpairs (this one is a bit messy), two centers seems to work quite well on the data. Number of centers is most appropriate when the total within sum of squares declines rapidly.
 
 ```{r}
 library(MASS)
 data('Boston')
 dist_euclidian <- dist(Boston)
 summary(dist_euclidian)
-km <- kmeans(dist_euclidian, centers=3)
+
+k_max <- 10
+twcss <- sapply(1:k_max, function(k){kmeans(dist_euclidian, k)$tot.withinss})
+
+plot(1:k_max, twcss, type='b')
+
+km <- kmeans(dist_euclidian, centers=2)
 pairs(Boston, col = c(km$cluster,alpha=0.2),pch=km$cluster)
 library(GGally)
 data.frame(km$cluster)[,1]
 Boston2 <- mutate(Boston, cluster = as.factor(data.frame(km$cluster)[,1]))
-ggpairs(Boston2, mapping = aes(col = cluster, alpha = 0.3), lower = list(combo = wrap("facethist", bins = 20)), title ="K-means (3) colored plots")
+ggpairs(Boston2, mapping = aes(col = cluster, alpha = 0.3), lower = list(combo = wrap("facethist", bins = 20)), title ="K-means (2) colored plots")
+
 ```
 
