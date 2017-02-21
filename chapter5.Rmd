@@ -15,7 +15,7 @@ We can see from the first plot below that GNI, maternal mortality rate, and adol
 
 From the second plot we can see that maternal mortality rate and adolescent birth rate are correlated and negatively correlated to high development variables such as: education ratio, GNI, and life expectancy.
 
-```{r, echo=FALSE, warning= FALSE, tidy= TRUE}
+```{r, cache=TRUE}
 human <- read.csv(file = "data/human.csv",row.names = "X")
 head(human)
 summary(human)
@@ -29,12 +29,10 @@ library(dplyr)
 
 # visualize the 'human_' variables
 ggpairs(human)
-```
-
-```{r, warning= FALSE, tidy= TRUE}
 
 # compute the correlation matrix and visualize it with corrplot
 cor(human) %>% round(digits=2) %>% corrplot.mixed(tl.cex = 0.7,number.cex=0.7,order="hclust",addrect=2)
+
 ```
 
 
@@ -45,7 +43,7 @@ cor(human) %>% round(digits=2) %>% corrplot.mixed(tl.cex = 0.7,number.cex=0.7,or
 <!-- Perform principal component analysis (PCA) on the not standardized human data. Show the variability captured by the principal components. Draw a biplot displaying the observations by the first two principal components (PC1 coordinate in x-axis, PC2 coordinate in y-axis), along with arrows representing the original variables. (0-2 points) -->
 Let's perform a PCA on the data. As we can see, without standardization the plot is quite a mess.
 
-```{r, echo=FALSE, warning= FALSE, tidy= TRUE}
+```{r, cache=FALSE}
 # perform principal component analysis (with the SVD method)
 pca_human_nstd <- prcomp(human)
 
@@ -58,9 +56,6 @@ pca_pr
 # create object pc_lab to be used as axis labels
 pc_lab <- paste0(names(pca_pr), " (", pca_pr, "%)")
 
-```
-
-```{r, warning= FALSE, tidy= TRUE}
 # draw a biplot of the principal component representation and the original variables
 biplot(pca_human_nstd, choices = 1:2, cex = c(0.4, 0.4), col = c("grey60","navyblue"), xlab = pc_lab[1], ylab = pc_lab[2])
 
@@ -72,7 +67,7 @@ This results seems appropriate, if in a country the child mortality rate is high
 
 <!-- Standardize the variables in the human data and repeat the above analysis. Interpret the results of both analysis (with and without standardizing). Are the results different? Why or why not? Include captions in you plots where you describe the results by using not just your variable names, but the actual phenomenons they relate to. (0-4 points) -->
 
-```{r, echo=FALSE, warning= FALSE, tidy= TRUE}
+```{r, cache=FALSE}
 # standardize the variables
 human_std <- scale(human)
 
@@ -91,34 +86,35 @@ pca_pr
 # create object pc_lab to be used as axis labels
 pc_lab <- paste0(names(pca_pr), " (", pca_pr, "%)")
 
-```
-
-```{r, warning= FALSE, tidy= TRUE}
-
 # draw a biplot of the principal component representation and the original variables
 biplot(pca_human, choices = 1:2, cex = c(0.4, 0.4), col = c("grey60","navyblue"), xlab = pc_lab[1], ylab = pc_lab[2])
 
 ```
 
+
 <!-- Give your personal interpretations of the first two principal component dimensions based on the biplot drawn after PCA on the standardized human data. (0-2 points) -->
+
 
 ### Multiple Correspondence Analysis
 
 Next we do a MCA on the tea dataset. There are 300 observations and 36 variables. Let's cut down on the variables we analyze to a more manageable rate. We include the type of tea (black, green etc.), with or without bonuses (lemon, milk etc.), type of tea package (bag, loose etc.), price (cheap, upscale etc.), with or without sugar,where tea is enjoyed (store, tea shop etc.), and whether or not drinking is done with breakfast.
 
-```{r,echo=FALSE, warning= FALSE, tidy= TRUE}
+```{r}
+
 library(FactoMineR)
 library(ggplot2)
+library(tidyr)
+
 data(tea)
 dim(tea)
 str(tea)
 #summary(tea)
 
 # column names to keep in the dataset
-keep_columns <- c("Tea", "How", "how","price", "sugar", "where", "breakfast")
+# select the columns to keep to create a new dataset
+library(dplyr)
+tea_time <- select(tea,one_of(c("Tea","How","how","price","sugar","where","breakfast")))
 
-# select the 'keep_columns' to create a new dataset
-tea_time <- select(tea, one_of(keep_columns))
 
 # look at the summaries and structure of the data
 #summary(tea_time)
@@ -137,26 +133,22 @@ tea_time$price <- mapvalues(tea_time$price, from = c("p_branded","p_cheap","p_pr
 #levels(tea_time$where)
 tea_time$where <- mapvalues(tea_time$where, from = c("chain store","chain store+tea shop","tea shop" ),to = c("store", "both", "shop"))
 #levels(tea_time$where)
-```
-```{r, warning= FALSE, tidy= TRUE}
+
 # visualize the dataset
 gather(tea_time) %>% ggplot(aes(value)) + facet_wrap("key", scales = "free") + geom_bar() + theme(axis.text.x = element_text(angle = 25, hjust = 1, size = 8))
-```
 
-```{r, echo=FALSE, warning= FALSE, tidy= TRUE}
 # tea_time is available
 
 # multiple correspondence analysis
 mca <- MCA(tea_time, graph = FALSE)
-```
 
-```{r, warning= FALSE, tidy= TRUE}
 # summary of the model
 summary(mca)
 
 # visualize MCA
 plot(mca, invisible=c("ind"), habillage = "quali")
 ```
+
 
 
 First we plot the frequencies of the variables. As we can see, most people use Earl Grey bag tea, drink it alone in a store (home excluded), from all kinds of price ranges, every now and then adding sugar. From the second plot we can see the illustration of the MCA model. We can see that exclusive group ( drinking green upscale loose tea in a tea shop) is more close to each other. The second group noting away from the main group is casual drinkers whom drink in a shop or store a variable price range bag or as loose tea added with a secret ingredient (other, possibly alcohol, I'm thinking about rum toddy here!). I excluded the other MCA graphs as they added little or no further information to the analysis.

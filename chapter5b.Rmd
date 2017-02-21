@@ -1,0 +1,13 @@
+---
+title: 'Chapter 5: Dimensionality reduction techniques'
+author: "Mikko Salonen"
+date: "21 February 2017"
+output: html_document
+---
+
+# Chapter 5: Dimensionality reduction techniques
+
+```{r,echo=FALSE,eval=FALSE}
+print("")
+```
+

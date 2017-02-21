@@ -71,6 +71,7 @@ Next we check the frequencies of high usage among different sexes  and variables
 
 
 ```{r}
+library(dplyr)
 data %>% group_by(sex,high_use) %>% summarise(count = n(),mean_grade = mean(G3))
 ggplot(alc, aes(x = high_use, y = G3, col=sex)) + geom_boxplot() + ylab("grade") + ggtitle("High Alcohol Usage and Test Performance")
 
